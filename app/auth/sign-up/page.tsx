@@ -7,9 +7,16 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, ControllerFieldState, ControllerRenderProps, useForm, UseFormStateReturn } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function SignUpPage() {
+	const [isPending, startTransition] = useTransition();
+
+	const router = useRouter();
 
 	const form = useForm({
 		resolver: zodResolver(signUpSchema),
@@ -21,10 +28,21 @@ export default function SignUpPage() {
 	});
 
 	async function onSubmit(data : z.infer<typeof signUpSchema>) {
-		await authClient.signUp.email({
-			email: data.email,
-			password: data.password,
-			name: data.name,
+		startTransition(async() => {
+			await authClient.signUp.email({
+				email: data.email,
+				password: data.password,
+				name: data.name,
+				fetchOptions: {
+					onSuccess: () => {
+						toast.success("Signed up successfully");
+						router.push("/");
+					},
+					onError: (error) => {
+						toast.error(error.error.message);
+					}
+				}
+			})
 		})
 	}
 	
@@ -65,8 +83,15 @@ export default function SignUpPage() {
 							</Field>
 						)} />
 
-						<Button type="submit">
-							Sign Up
+						<Button disabled={isPending}>	
+							{isPending ? (
+								<>
+									<Loader2 className="size-4 animate-spin" />
+									<span>Loading...</span>
+								</>
+							) : (
+								<span>Sign Up</span>
+							)}
 						</Button>
 					</FieldGroup>
 				</form>
