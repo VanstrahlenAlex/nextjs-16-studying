@@ -4,10 +4,12 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api"
 import { fetchQuery } from "convex/nextjs";
-import { useQuery } from "convex/react"
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+
+export const dynamic = "force-static";
+export const revalidate = 10;
 
 export default function BlogPage() {
 
@@ -39,10 +41,10 @@ async function LoadBlogList() {
 				<Card key={post._id} className="pt-0">
 					<div className="relative h-48 w-full overflow-hidden">
 						<Image
-							src="https://assets.basehub.com/abf101479dea7d2c/6f41915a5fe603226920bebbd79f8539/vercel0.webp"
+							src={post.imageUrl ?? "https://assets.basehub.com/abf101479dea7d2c/6f41915a5fe603226920bebbd79f8539/vercel0.webp"}
 							alt={post.title}
 							fill
-							className="rounded-t-lg"
+							className="rounded-t-lg object-cover"
 						/>
 					</div>
 					<CardContent>

@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
 		{
 			protocol: "https",
 			hostname: "assets.basehub.com",
+		},
+		{
+			hostname: "wary-husky-328.convex.cloud",
+			protocol: "https",
+			port: "",
 		}
 	]
   },	
