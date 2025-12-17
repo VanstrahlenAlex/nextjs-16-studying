@@ -9,5 +9,11 @@ export default defineSchema({
 		imageStorageId: v.optional(v.id("_storage")),
 		createdAt: v.number(),
 		updatedAt: v.number(),
+	}),
+	comments: defineTable({
+		postId: v.id("posts"),
+		authorId: v.string(),
+		authorName: v.string(),
+		body: v.string(),
 	})
 })
