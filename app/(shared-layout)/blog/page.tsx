@@ -5,30 +5,29 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api"
 import { fetchQuery } from "convex/nextjs";
 import { Metadata } from "next";
-import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
-import { connection } from "next/server";
 import { Suspense } from "react";
 
-// export const dynamic = "force-static";
-// export const revalidate = 1;
+// Force dynamic rendering to avoid build-time Convex queries
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 
-export const metadata : Metadata = {
+export const metadata: Metadata = {
 	title: "Blog | Neextjs 16 - Convex",
 	description: "Read our lastest articles and insights",
 	category: "Web development",
-	authors: [{ name :"Alexander Van strahlen"}],
+	authors: [{ name: "Alexander Van strahlen" }],
 	keywords: ["Nextjs", "Convex", "Web development", "Blog", "Alexander Van strahlen"],
 }
 
 export default function BlogPage() {
 
 	// const data = useQuery(api.posts.getPosts)
-	
+
 	return (
-		
+
 		<div className="py-12 ">
 			<div className="text-center pb-12">
 				<h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">Our Blog</h1>
@@ -37,19 +36,13 @@ export default function BlogPage() {
 			{/* <Suspense fallback={
 				<SkeletonLoadingUi />
 			}> */}
-				<LoadBlogList />
+			<LoadBlogList />
 			{/* </Suspense> */}
 		</div>
 	)
 }
 
 async function LoadBlogList() {
-	// await new Promise((resolve) => setTimeout(resolve, 5000));
-	// 
-	"use cache";
-	cacheLife("hours");
-	cacheTag("blog")
-	// await connection();
 	const data = await fetchQuery(api.posts.getPosts);
 
 	return (
@@ -94,7 +87,7 @@ function SkeletonLoadingUi() {
 					<Skeleton className="h-4 w-2/3" />
 
 				</div>
-				 </div>)}
+			</div>)}
 		</div>
 	)
 }
