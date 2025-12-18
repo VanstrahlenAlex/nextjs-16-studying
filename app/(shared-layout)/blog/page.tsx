@@ -9,9 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
-// Force dynamic rendering to avoid build-time Convex queries
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+
 
 
 export const metadata: Metadata = {
