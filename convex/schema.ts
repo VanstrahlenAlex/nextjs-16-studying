@@ -9,6 +9,10 @@ export default defineSchema({
 		imageStorageId: v.optional(v.id("_storage")),
 		createdAt: v.number(),
 		updatedAt: v.number(),
+	}).searchIndex('search_title', {
+		searchField: 'title',
+	}).searchIndex('search_body', {
+		searchField: 'body',
 	}),
 	comments: defineTable({
 		postId: v.id("posts"),

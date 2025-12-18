@@ -4,12 +4,24 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api"
 import { fetchQuery } from "convex/nextjs";
+import { Metadata } from "next";
+import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
-export const dynamic = "force-static";
-export const revalidate = 10;
+// export const dynamic = "force-static";
+// export const revalidate = 1;
+
+
+export const metadata : Metadata = {
+	title: "Blog | Neextjs 16 - Convex",
+	description: "Read our lastest articles and insights",
+	category: "Web development",
+	authors: [{ name :"Alexander Van strahlen"}],
+	keywords: ["Nextjs", "Convex", "Web development", "Blog", "Alexander Van strahlen"],
+}
 
 export default function BlogPage() {
 
@@ -22,17 +34,22 @@ export default function BlogPage() {
 				<h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">Our Blog</h1>
 				<p className="pt-4 max-w-2xl mx-auto text-xl text-muted-foreground">Insights, thoughts, and trends from our team</p>
 			</div>
-			<Suspense fallback={
+			{/* <Suspense fallback={
 				<SkeletonLoadingUi />
-			}>
+			}> */}
 				<LoadBlogList />
-			</Suspense>
+			{/* </Suspense> */}
 		</div>
 	)
 }
 
 async function LoadBlogList() {
-	await new Promise((resolve) => setTimeout(resolve, 5000));
+	// await new Promise((resolve) => setTimeout(resolve, 5000));
+	// 
+	"use cache";
+	cacheLife("hours");
+	cacheTag("blog")
+	// await connection();
 	const data = await fetchQuery(api.posts.getPosts);
 
 	return (
